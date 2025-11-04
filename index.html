@@ -154,17 +154,17 @@
         <!-- Lớp nền: Sử dụng màu tối và chèn ảnh nền ở dưới -->
         <!-- Bạn có thể thay đổi URL ảnh này -->
         <div class="absolute inset-0 z-0">
-            <!-- Lớp màu nền chính (đã có trên body, nhưng để đây cho chắc) -->
             <div class="absolute inset-0 bg-brand-dark-green"></div>
-            
-            <!-- Ảnh nền ở dưới (sử dụng placehold.co làm ví dụ) -->
-            <!-- Thay 'src' bằng URL ảnh của bạn -->
-            <img src="./IMG/background.png" 
-                 alt="Background" 
-                 class="absolute bottom-0 left-0 w-full h-2/3 object-cover opacity-30 mix-blend-luminosity">
-            
-            <!-- Lớp phủ gradient để hòa trộn -->
-            <div class="absolute inset-0 bg-gradient-to-t from-brand-dark-green via-brand-dark-green/50 to-transparent"></div>
+
+            <!-- Changed: cho ảnh phủ full màn hình, giữ màu gốc -->
+            <div class="absolute inset-0">
+                <img src="./IMG/background.png"
+                     alt="Background"
+                     class="w-full h-full object-cover object-center opacity-50 mix-blend-normal">
+            </div>
+
+            <!-- Changed: giảm độ đậm của overlay để ảnh hiện đúng màu -->
+            <div class="absolute inset-0 bg-gradient-to-t from-brand-dark-green/20 via-brand-dark-green/10 to-transparent pointer-events-none"></div>
         </div>
 
         <!-- Lớp nội dung: Form được căn giữa -->
