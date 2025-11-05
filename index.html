@@ -1,139 +1,127 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Noel No Cool Show Season 3</title>
-    <!-- Tải Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Sử dụng font Inter cho toàn bộ trang */
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        /* Thêm font Inter từ Google Fonts */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+    <link rel="stylesheet" href="./CSS/color.css">
+    <!-- Google Material Symbols (outlined) -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    <link rel="stylesheet" href="./CSS/style.css">
 
-        /* --- CSS CHO SPLASH SCREEN --- */
-
-        /* Ẩn nội dung chính ban đầu */
-        #main-content {
-            opacity: 0;
-            transform: translateY(-20px); /* Thêm: trượt từ trên xuống */
-            /* Trễ 1.5s (0.5s thu nhỏ + 1s phóng to) */
-            transition: opacity 1s ease-out 1.5s, transform 1s ease-out 1.5s;
-        }
-
-        /* Lớp phủ Splash Screen */
-        #splash-screen {
-            position: fixed;
-            inset: 0;
-            z-index: 50;
-            background-color: #024033; /* Màu nền brand-dark-green */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            /* Trễ 0.5s (sau khi logo thu nhỏ) */
-            transition: opacity 1s ease-in 0.5s; 
-        }
-
-        /* Logo (nơi bạn có thể chèn logo) */
-        #splash-logo {
-            width: 6rem; /* 96px */
-            height: 6rem; /* 96px */
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 2; /* Thêm: để logo nổi lên trên */
-            /* Hiệu ứng thu nhỏ (EaseInBack) */
-            transition: transform 0.5s cubic-bezier(0.6, -0.28, 0.73, 0.04);
-        }
-
-        /* Vòng xoay spinner */
-        #splash-spinner {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 9999px; /* rounded-full */
-            border-width: 4px;
-            border-color: #D6AD53; /* brand-gold */
-            border-top-color: transparent;
-            animation: spin 1s linear infinite;
-        }
-        
-        /* Chữ "LOGO" ở giữa (bạn có thể thay bằng thẻ <img>) */
-        #splash-logo-inner {
-            color: #F9E09D; /* brand-light-gold */
-            font-weight: 600; /* semibold */
-            font-size: 1.125rem; /* text-lg */
-        }
-
-        /* Keyframes cho vòng xoay */
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        /* Vòng tròn phóng to MỚI */
-        #splash-expander {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 6rem; /* Bằng kích thước logo */
-            height: 6rem; /* Bằng kích thước logo */
-            border-radius: 50%;
-            background-color: #D6AD53; /* brand-gold */
-            transform: translate(-50%, -50%) scale(0);
-            z-index: 1; /* Dưới logo */
-            /* Chuyển động phóng to (trễ 0.5s sau khi logo thu nhỏ) */
-            transition: transform 1s cubic-bezier(0.7, 0, 0.3, 1) 0.5s;
-        }
-
-
-        /* --- LỚP TRẠNG THÁI KẾT THÚC (EXIT) --- */
-
-        /* 1. Logo thu nhỏ lại */
-        #splash-logo.exit-shrink {
-            transform: scale(0);
-        }
-
-        /* 2. Vòng tròn phóng to */
-        #splash-expander.exit-expand {
-            transform: translate(-50%, -50%) scale(50);
-        }
-
-        /* 3. Màn hình chờ mờ đi */
-        #splash-screen.exit-fade {
-            opacity: 0;
-        }
-
-        /* 4. Nội dung chính hiện ra */
-        #main-content.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-    </style>
-    <script>
-        // Định nghĩa bảng màu của bạn trong Tailwind
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'brand-red': '#FF310F',
-                        'brand-gold': '#D6AD53',
-                        'brand-light-gold': '#F9E09D',
-                        'brand-teal': '#00876D',
-                        'brand-dark-green': '#024033',
-                    }
-                }
-            }
-        }
-    </script>
 </head>
-<body class="relative min-h-screen w-full font-sans bg-brand-dark-green">
+
+<body class="app-body">
+
+    <!-- Notifications container (top-down, glass style) -->
+    <div id="notifications" class="notifications" aria-live="polite" aria-atomic="true"></div>
+    <!-- Root to mount music modal (JS sẽ chèn modal vào đây) -->
+    <div id="music-modal-root"></div>
+
+    <!-- COUNTDOWN BAR -->
+    <div id="countdown-bar" class="countdown-bar">
+        <div class="countdown-status" id="countdown-status">Sự kiện: Noel No Cool Show</div>
+        <div class="countdown-time" id="countdown-time">-- ngày --:--:--</div>
+        <div class="countdown-thumb">
+            <!-- inline SVG placeholder -->
+            <img src="./DATA/IMG/merry_load.gif"
+                alt="thumb">
+        </div>
+    </div>
+
+    <!-- Scroll button to form -->
+    <div style="text-align:center; margin-top:0.5rem; z-index:25; position:relative;">
+        <button id="scroll-to-form" class="scroll-button">
+            <img src="./DATA/IMG/christ_tree.gif" alt="Christmas Tree" >
+            Đăng ký ngay
+            <img src="./DATA/IMG/christ_tree.gif" alt="Christmas Tree" >
+        </button>
+    </div>
+
+    <!-- INFO SECTION: chương trình Noel (glass cards) -->
+    <section class="info-section" id="info-section">
+        <!-- 1: text only -->
+        <article class="info-card">
+            <div class="card-content">
+                <div class="card-text">
+                    <h3>Giới thiệu chương trình</h3>
+                    <p>Chương trình Noel No Cool Show Season 3 mang đến nhiều phần quà, trải nghiệm âm nhạc và hoạt động
+                        hấp dẫn cho khán giả tham gia. Hãy đăng ký và theo dõi để không bỏ lỡ.</p>
+                </div>
+            </div>
+        </article>
+
+        <!-- 2: media right -->
+        <article class="info-card media-right">
+            <div class="card-content">
+                <div class="card-text">
+                    <h3>Hoạt động chính</h3>
+                    <p>Các hoạt động: gameshow, bốc thăm trúng thưởng, biểu diễn ca nhạc và nhiều gian hàng tương tác
+                        dành cho cả gia đình.</p>
+                </div>
+                <div class="card-media">
+                    <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400'><rect width='600' height='400' fill='%23024033'/><text x='50%' y='50%' fill='%23D6AD53' font-size='28' font-family='Arial' text-anchor='middle'>Image</text></svg>"
+                        alt="activity">
+                </div>
+            </div>
+        </article>
+
+        <!-- 3: media left -->
+        <article class="info-card media-left">
+            <div class="card-content">
+                <div class="card-text">
+                    <h3>Khung giờ & lịch trình</h3>
+                    <p>Sự kiện diễn ra vào các ngày cuối tuần trong tháng 12, chi tiết thời gian từng tiết mục sẽ được
+                        cập nhật sau khi tổ chức.</p>
+                </div>
+                <div class="card-media">
+                    <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400'><rect width='600' height='400' fill='%23D6AD53'/><text x='50%' y='50%' fill='%23024033' font-size='28' font-family='Arial' text-anchor='middle'>Image</text></svg>"
+                        alt="schedule">
+                </div>
+            </div>
+        </article>
+
+        <!-- 4: media right -->
+        <article class="info-card media-right">
+            <div class="card-content">
+                <div class="card-text">
+                    <h3>Quà tặng & phần thưởng</h3>
+                    <p>Người tham gia có cơ hội nhận quà lưu niệm, voucher và phần thưởng giá trị từ nhà tài trợ.</p>
+                </div>
+                <div class="card-media">
+                    <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400'><rect width='600' height='400' fill='%23024033'/><text x='50%' y='50%' fill='%23D6AD53' font-size='28' font-family='Arial' text-anchor='middle'>Image</text></svg>"
+                        alt="gifts">
+                </div>
+            </div>
+        </article>
+
+        <!-- 5: media left -->
+        <article class="info-card media-left">
+            <div class="card-content">
+                <div class="card-text">
+                    <h3>Hỗ trợ & liên hệ</h3>
+                    <p>Liên hệ ban tổ chức qua hotline hoặc email để biết thêm thông tin và hỗ trợ đăng ký.</p>
+                </div>
+                <div class="card-media">
+                    <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400'><rect width='600' height='400' fill='%23D6AD53'/><text x='50%' y='50%' fill='%23024033' font-size='28' font-family='Arial' text-anchor='middle'>Image</text></svg>"
+                        alt="contact">
+                </div>
+            </div>
+        </article>
+
+        <!-- 6: text only -->
+        <article class="info-card">
+            <div class="card-content">
+                <div class="card-text">
+                    <h3>Ghi chú</h3>
+                    <p>Vé và đăng ký có thể được giới hạn. Vui lòng kiểm tra điều khoản và điều kiện trước khi tham gia.
+                    </p>
+                </div>
+            </div>
+        </article>
+    </section>
 
     <!-- LỚP SPLASH SCREEN -->
     <div id="splash-screen">
@@ -144,78 +132,86 @@
             <!-- Vòng xoay -->
             <div id="splash-spinner"></div>
             <!-- Thay thế "LOGO" bằng thẻ <img> của bạn nếu muốn -->
-            <div id="splash-logo-inner">LOGO</div>
+            <div id="splash-logo-inner"><img src="./DATA/IMG/LOGO.jpg" alt="Logo" style="width: 50px; height: auto;"></div>
         </div>
     </div>
 
     <!-- NỘI DUNG CHÍNH (FORM) -->
     <!-- Thêm id="main-content" -->
     <div id="main-content">
-        <!-- Lớp nền: Sử dụng màu tối và chèn ảnh nền ở dưới -->
-        <!-- Bạn có thể thay đổi URL ảnh này -->
-        <div class="absolute inset-0 z-0">
-            <div class="absolute inset-0 bg-brand-dark-green"></div>
-
-            <!-- Changed: cho ảnh phủ full màn hình, giữ màu gốc -->
-            <div class="absolute inset-0">
-                <img src="./IMG/background.png"
-                     alt="Background"
-                     class="w-full h-full object-cover object-center opacity-50 mix-blend-normal">
+        <!-- Background for the form (restored to match original look) -->
+        <div class="form-bg-layer" aria-hidden="true">
+            <div class="form-bg-solid"></div>
+            <div class="form-bg-image-wrap">
+                <img src="./DATA/IMG/background.png" alt="Background" class="form-bg-image">
             </div>
-
-            <!-- Changed: giảm độ đậm của overlay để ảnh hiện đúng màu -->
-            <div class="absolute inset-0 bg-gradient-to-t from-brand-dark-green/20 via-brand-dark-green/10 to-transparent pointer-events-none"></div>
+            <div class="form-bg-gradient"></div>
         </div>
 
         <!-- Lớp nội dung: Form được căn giữa -->
         <!-- Thay đổi p-4 -> p-6 để có đệm cân đối hơn trên mobile -->
-        <div class="relative z-10 flex items-center justify-center min-h-screen w-full p-6 md:p-8">
+        <div class="center-container">
 
             <!-- Khung Form Glassmorphism -->
             <!-- Thay đổi p-8 -> p-6 (cho mobile) và giữ md:p-10 (cho desktop) -->
-            <form id="contact-form" class="w-full max-w-lg p-6 md:p-10 bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl">
+            <form id="contact-form" class="form-card">
 
-                <h2 class="text-3xl font-bold text-center text-brand-light-gold mb-8">
+                <h2 class="form-title">
                     Thông Tin Đăng Ký
                 </h2>
 
                 <!-- Trường: Tên -->
-                <div class="mb-5">
-                    <label for="Ten" class="block text-brand-light-gold text-sm font-semibold mb-2">Họ và Tên</label>
-                    <input type="text" id="Ten" name="Ten" placeholder="Nguyễn Văn A" required
-                           class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-gold transition-all duration-300">
+                <div class="form-group">
+                    <label for="Ten" class="form-label">Họ và Tên</label>
+                    <input type="text" id="Ten" name="Ten" placeholder="Nguyễn Văn A" required class="form-input">
                 </div>
 
-                <!-- Trường: Tuổi -->
-                <div class="mb-5">
-                    <label for="Tuoi" class="block text-brand-light-gold text-sm font-semibold mb-2">Tuổi</label>
-                    <input type="number" id="Tuoi" name="Tuoi" placeholder="25" required
-                           class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-gold transition-all duration-300">
+                <!-- Trường: Năm sinh -->
+                <div class="form-group">
+                    <label for="NamSinh" class="form-label">Năm sinh</label>
+                    <input type="number" id="NamSinh" name="NamSinh" placeholder="1990" required class="form-input"
+                        min="1900" max="2025">
                 </div>
 
-                <!-- Trường: Giới tính -->
-                <div class="mb-5">
-                    <label for="GioiTinh" class="block text-brand-light-gold text-sm font-semibold mb-2">Giới tính</label>
-                    <select id="GioiTinh" name="GioiTinh" required
-                            class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-white focus:outline-none focus:ring-2 focus:ring-brand-gold transition-all duration-300 appearance-none">
-                        <option value="" disabled selected class="bg-brand-dark-green">Chọn giới tính</option>
-                        <option value="Nam" class="bg-brand-dark-green">Nam</option>
-                        <option value="Nữ" class="bg-brand-dark-green">Nữ</option>
-                        <option value="Khác" class="bg-brand-dark-green">Khác</option>
-                    </select>
+                <!-- Trường: Giới tính (option buttons) -->
+                <div class="form-group">
+                    <label class="form-label">Giới tính</label>
+                    <div class="option-group" role="radiogroup" aria-label="Giới tính">
+                        <button type="button" class="option-button" data-name="GioiTinh" data-value="Nam">Nam</button>
+                        <button type="button" class="option-button" data-name="GioiTinh" data-value="Nữ">Nữ</button>
+                    </div>
+                    <input type="hidden" id="GioiTinh" name="GioiTinh" required>
+                </div>
+
+                <!-- Trường: Bạn có phải là thành viên đã kết nạp DLST (option buttons) -->
+                <div class="form-group">
+                    <label class="form-label">Bạn có phải là thành viên đã kết nạp DLST</label>
+                    <div class="option-group" role="radiogroup" aria-label="Thành viên">
+                        <button type="button" class="option-button" data-name="ThanhVien" data-value="Da ket nap">Đã kết
+                            nạp</button>
+                        <button type="button" class="option-button" data-name="ThanhVien" data-value="Chua ket nap">Chưa
+                            kết nạp</button>
+                    </div>
+                    <input type="hidden" id="ThanhVien" name="ThanhVien" required>
+                </div>
+
+                <!-- Trường: Email -->
+                <div class="form-group">
+                    <label for="Email" class="form-label">Email</label>
+                    <input type="email" id="Email" name="Email" placeholder="you@gmail.com" required class="form-input"
+                        pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$">
                 </div>
 
                 <!-- Trường: Số điện thoại -->
-                <div class="mb-6">
-                    <label for="SoDienThoai" class="block text-brand-light-gold text-sm font-semibold mb-2">Số điện thoại</label>
-                    <input type="tel" id="SoDienThoai" name="SoDienThoai" placeholder="090..." required
-                           class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-gold transition-all duration-300">
+                <div class="form-group">
+                    <label for="SoDienThoai" class="form-label">Số điện thoại (10 chữ số)</label>
+                    <input type="tel" id="SoDienThoai" name="SoDienThoai" placeholder="0901234567" required
+                        class="form-input" pattern="^\d{10}$">
                 </div>
 
                 <!-- Nút Gửi -->
                 <div>
-                    <button type="submit" id="submit-button"
-                            class="w-full px-4 py-3 bg-brand-red text-brand-dark-green text-lg font-bold rounded-2xl shadow-lg hover:bg-opacity-90 transition-all duration-300 transform hover:scale-105">
+                    <button type="submit" id="submit-button" class="btn-submit">
                         Gửi Thông Tin
                     </button>
                 </div>
@@ -223,121 +219,26 @@
             </form>
         </div>
     </div> <!-- Kết thúc #main-content -->
-
-
-    <!-- Thông báo (Toast) - ẩn ban đầu -->
-    <div id="message-toast" class="fixed bottom-5 right-5 p-4 rounded-xl shadow-lg text-white font-semibold transition-all duration-500 opacity-0 translate-y-10">
-        <span id="message-text"></span>
+    <!-- Music Space: fixed glass player in bottom-right -->
+    <div id="music-space" class="music-space" aria-live="polite">
+        <div class="ms-inner">
+            <button class="ms-btn ms-prev" title="Previous track" aria-label="Previous track"><span
+                    class="material-symbols-outlined">arrow_BACK</span></button>
+            <button class="ms-btn ms-play" title="Play/Pause" aria-label="Play or pause"><span
+                    class="material-symbols-outlined">play_arrow</span></button>
+            <button class="ms-btn ms-next" title="Next track" aria-label="Next track"><span
+                    class="material-symbols-outlined">arrow_forward</span></button>
+            <div class="ms-info">
+                <div class="ms-title">Music Space</div>
+                <div class="ms-status">No tracks loaded</div>
+                <div class="ms-progress" aria-hidden="true">
+                    <div class="ms-progress-bar"></div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <script>
-        // --- LOGIC CHO SPLASH SCREEN ---
-        window.addEventListener('load', () => {
-            const splashScreen = document.getElementById('splash-screen');
-            const splashLogo = document.getElementById('splash-logo');
-            const splashExpander = document.getElementById('splash-expander'); // Thêm
-            const mainContent = document.getElementById('main-content');
-            const spinner = document.getElementById('splash-spinner');
-
-            // Đợi 2 giây sau khi mọi thứ tải xong
-            setTimeout(() => {
-                // Dừng vòng xoay
-                spinner.style.animation = 'none';
-
-                // Kích hoạt tất cả các lớp exit
-                // CSS transition-delay sẽ xử lý thứ tự
-                splashLogo.classList.add('exit-shrink');
-                splashExpander.classList.add('exit-expand');
-                splashScreen.classList.add('exit-fade');
-                mainContent.classList.add('visible');
-
-                // Sau khi hiệu ứng transition kết thúc, ẩn hoàn toàn splash screen
-                splashScreen.addEventListener('transitionend', (e) => {
-                    // Chỉ bắt sự kiện 'opacity' để tránh bị kích hoạt bởi transform
-                    if (e.propertyName === 'opacity') {
-                        splashScreen.style.display = 'none';
-                    }
-                }); 
-
-            }, 2000); // 2 giây
-        });
-
-
-        // --- PHẦN JAVASCRIPT ĐỂ GỬI DATA VỀ GOOGLE SHEET ---
-
-        // BƯỚC 6: Dán URL Web App của bạn vào đây
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzfH61O-62OZnn5A2M_R14HLQsYlHDWC_21KrR38ZNIN0q1ou49G16SURNNsB_BIqvf/exec';
-
-        const form = document.getElementById('contact-form');
-        const submitButton = document.getElementById('submit-button');
-        const messageToast = document.getElementById('message-toast');
-        const messageText = document.getElementById('message-text');
-
-        form.addEventListener('submit', function(e) {
-            e.preventDefault(); // Ngăn form gửi theo cách truyền thống
-
-            // Vô hiệu hóa nút và hiển thị trạng thái đang gửi
-            submitButton.disabled = true;
-            submitButton.textContent = 'Đang gửi...';
-
-            const formData = new FormData(form);
-
-            // Gửi dữ liệu đến Google Apps Script
-            fetch(SCRIPT_URL, {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.result === 'success') {
-                    // Gửi thành công
-                    showMessage('Gửi thông tin thành công!', 'success');
-                    form.reset(); // Xóa rỗng form
-                } else {
-                    // Có lỗi xảy ra
-                    console.error('Error from Apps Script:', data.error);
-                    showMessage('Gửi thất bại. Vui lòng thử lại.', 'error');
-                }
-            })
-            .catch(error => {
-                // Lỗi mạng hoặc fetch
-                console.error('Fetch Error:', error);
-                showMessage('Lỗi kết nối. Vui lòng thử lại.', 'error');
-            })
-            .finally(() => {
-                // Kích hoạt lại nút
-                submitButton.disabled = false;
-                submitButton.textContent = 'Gửi Thông Tin';
-            });
-        });
-
-        // Hàm hiển thị thông báo
-        function showMessage(message, type) {
-            messageText.textContent = message;
-
-            // Đặt màu sắc dựa trên loại thông báo
-            if (type === 'success') {
-                messageToast.classList.remove('bg-brand-red');
-                messageToast.classList.add('bg-brand-teal');
-            } else {
-                messageToast.classList.remove('bg-brand-teal');
-                messageToast.classList.add('bg-brand-red');
-            }
-
-            // Hiển thị thông báo
-            messageToast.classList.remove('opacity-0', 'translate-y-10');
-            messageToast.classList.add('opacity-100', 'translate-y-0');
-
-            // Ẩn sau 3 giây
-            setTimeout(() => {
-                messageToast.classList.remove('opacity-100', 'translate-y-0');
-                messageToast.classList.add('opacity-0', 'translate-y-10');
-            }, 3000);
-        }
-
-    </script>
+    <script src="./JS/main.js"></script>
 </body>
+
 </html>
-
-
-

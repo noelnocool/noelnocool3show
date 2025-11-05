@@ -1,0 +1,12 @@
+:root {
+    --brand-red: #FF310F;
+    --brand-gold: #D6AD53;
+    --brand-light-gold: #F9E09D;
+    --brand-teal: #00876D;
+    --brand-dark-green: #024033;
+    --glass-bg: rgba(49, 47, 47, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --input-bg: rgba(255, 255, 255, 0.05);
+    --input-border: rgba(255, 255, 255, 0.1);
+    --WHITE: #FFFFFF;
+}
