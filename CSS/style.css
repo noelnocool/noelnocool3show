@@ -157,7 +157,7 @@ body {
     justify-content: center;
     min-height: 100vh;
     width: 100%;
-    padding: 1.5rem;
+    padding: 1rem;
 }
 
 /* Form-specific background (covers the main-content area) */
@@ -722,7 +722,7 @@ body.app-body,
 .center-container,
 .info-section,
 .form-card {
-    width: calc(100% - 2rem);
+    width: calc(100% - 0.5rem);
     max-width: var(--container-max);
     margin-left: auto;
     margin-right: auto;
