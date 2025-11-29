@@ -1,5 +1,4 @@
 [
-  { "file": "themesong.mp3", "title": "Jingle bell" },
   { "file": "song_1.mp3", "title": "Jingle bell" },
-   { "file": "song_2.mp3", "title": "Last Christmas" }
+  { "file": "song_2.mp3", "title": "Last Christmas" }
 ]
